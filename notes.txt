@@ -1,0 +1,20 @@
+
+
+conda create -n fairseq python=3.10
+python -m pip install pip==24.0
+
+
+
+
+cd examples/translation/
+
+#this failed
+CFLAGS="-stdlib=libc++" pip install --editable ./
+
+cd examples/translation/
+bash prepare-iwslt14.sh
+cd ../..
+TEXT=examples/translation/iwslt14.tokenized.de-en
+fairseq-preprocess --source-lang de --target-lang en \
+    --trainpref $TEXT/train --validpref $TEXT/valid --testpref $TEXT/test \
+    --destdir data-bin/iwslt14.tokenized.de-e
