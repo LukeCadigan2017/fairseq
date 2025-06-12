@@ -1,20 +1,31 @@
+Ok, so looks like training works with original parameters
+
+Now, we're trying to figure out how to train it with sparsemax
+
+fconv_wmt_en_fr
+
+Looks like when you train, you specify architecture with --arch and checkpoint dir with --save-dir 
 
 
-conda create -n fairseq python=3.10
-python -m pip install pip==24.0
+
+ls fairseq/models/transformer/transformer_decoder.py
+ls fairseq/modules/multihead_attention.py
+
+cp fairseq/models/transformer/transformer_decoder.py fairseq/models/transformer/transformer_decoder_original.py
+cp fairseq/modules/multihead_attention.py fairseq/modules/multihead_attention_original.py
+
+cp fairseq/models/transformer/transformer_decoder.py fairseq/models/transformer/transformer_decoder_multimax.py
+cp fairseq/modules/multihead_attention.py fairseq/modules/multihead_attention_multimax.py
+
+    
+
+
+cp /Users/lukecadigan/thesis/MultiMax/thesis/transformer_decoder.py fairseq/models/transformer/transformer_decoder.py
+cp /Users/lukecadigan/thesis/MultiMax/thesis/multihead_attention.py fairseq/modules/multihead_attention.py
 
 
 
 
-cd examples/translation/
+code fairseq/models/transformer/transformer_decoder.py
+code fairseq/modules/multihead_attention.py
 
-#this failed
-CFLAGS="-stdlib=libc++" pip install --editable ./
-
-cd examples/translation/
-bash prepare-iwslt14.sh
-cd ../..
-TEXT=examples/translation/iwslt14.tokenized.de-en
-fairseq-preprocess --source-lang de --target-lang en \
-    --trainpref $TEXT/train --validpref $TEXT/valid --testpref $TEXT/test \
-    --destdir data-bin/iwslt14.tokenized.de-e
