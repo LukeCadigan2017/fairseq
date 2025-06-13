@@ -412,6 +412,7 @@ def multi_head_attention_forward(
             attn_output_weights = torch.bmm(q_scaled, k.transpose(-2, -1))
         
         attn_output_weights = softmax(attn_output_weights, dim=-1)
+        # attn_output_weights = sparsemax(attn_output_weights, dim=-1)
         
         if dropout_p > 0.0:
             attn_output_weights = dropout(attn_output_weights, p=dropout_p)
@@ -1176,6 +1177,8 @@ class MultiheadAttention(FairseqIncrementalDecoder):
         attn_weights_float = utils.softmax(
             attn_weights, dim=-1, onnx_trace=self.onnx_trace
         )
+        # attn_weights_float = sparsemax(attn_weights, dim=-1)
+
         attn_weights = attn_weights_float.type_as(attn_weights)
         attn_probs = self.dropout_module(attn_weights)
 
