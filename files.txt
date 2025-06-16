@@ -1,0 +1,6 @@
+export FOREIGN_PATH=/gpfs/home5/lcadigan/fairseq/outputs/fairseq_12367901.out
+export LOCAL_NAME=default_train.out
+cd /Users/lukecadigan/thesis/fairseq
+rsync -av lcadigan@snellius.surf.nl:${FOREIGN_PATH} ${LOCAL_NAME}
+echo ${LOCAL_NAME}
+code ${LOCAL_NAME}

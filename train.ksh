@@ -1,4 +1,4 @@
-conda activate fairseq
+#conda activate fairseq
 
 # CUDA_VISIBLE_DEVICES=0 fairseq-train \
 #     data-bin/iwslt14.tokenized.de-en \
@@ -29,7 +29,7 @@ CUDA_VISIBLE_DEVICES=0 fairseq-train \
     --eval-bleu-remove-bpe \
     --eval-bleu-print-samples \
     --best-checkpoint-metric bleu --maximize-best-checkpoint-metric \
-    --max-update 2 
+    --max-epoch 50
 
 
 

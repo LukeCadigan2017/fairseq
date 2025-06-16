@@ -145,3 +145,4 @@ outputs
 a.txt
 notes.txt
 notes.txt
+softmax_results.json/generate-test.txt
