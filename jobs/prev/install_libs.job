@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#SBATCH --job-name=wmt_sample_test
+#SBATCH --partition=staging
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=01:00:00
+#SBATCH --output=outputs/fairseq_%A.out
+
+source ~/miniconda3/bin/activate
+conda activate fairseq
+
+#yes | pip install --editable ./
+#echo -e "\n\n\n" pip install --editable ./ -y
+
+
+echo -e "\n\n\n" pip install fastBPE sacremoses subword_nmt -y
+yes | pip install fastBPE sacremoses subword_nmt
+
+
+echo -e "\n\n\n" pip install tensorboardX -y
+yes | pip install tensorboardX 
+
+#echo -e "\n\n\n" pip install fastBPE sacremoses subword_nmt -y
