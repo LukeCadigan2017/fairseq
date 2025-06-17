@@ -1,12 +1,16 @@
 #!/bin/bash
 
 #SBATCH --job-name=wmt_sample_test
-#SBATCH --partition=staging
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=10:00:00
+#SBATCH --time=11:00:00
 #SBATCH --output=outputs/fairseq_train_%A.out
+#SBATCH --partition=gpu_h100
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-task=8
+
+
 
 source ~/miniconda3/bin/activate
 conda activate fairseq
