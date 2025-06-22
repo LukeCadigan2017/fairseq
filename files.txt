@@ -1,6 +1,53 @@
-export FOREIGN_PATH=/gpfs/home5/lcadigan/fairseq/outputs/fairseq_12367901.out
-export LOCAL_NAME=default_train.out
+export FOREIGN_PATH=/gpfs/home5/lcadigan/checkpoints_fairseq/IWSLT/save/checkpoint_last.pt
+export LOCAL_NAME=checkpoint_last.pt
+rsync -av lcadigan@snellius.surf.nl:${FOREIGN_PATH} ${LOCAL_NAME}
+
+
+
+/gpfs/home5/lcadigan/checkpoints_fairseq/IWSLT/save/checkpoint_best.pt
+
+
+export FOREIGN_PATH=/gpfs/home5/lcadigan/fairseq/softmax_results/
+export LOCAL_NAME=softmax_results
 cd /Users/lukecadigan/thesis/fairseq
+mkdir $LOCAL_NAME
 rsync -av lcadigan@snellius.surf.nl:${FOREIGN_PATH} ${LOCAL_NAME}
 echo ${LOCAL_NAME}
 code ${LOCAL_NAME}
+
+
+
+
+
+
+
+
+
+
+#for helm output suites
+cd /Users/lukecadigan/thesis/helm
+export SUITE_NAME=sample_100_eval_100_top_k_30
+export FOREIGN_PATH=helm_output/${SUITE_NAME}
+export LOCAL_BASE=snellius_copies/helm_output
+cd /Users/lukecadigan/thesis/helm
+echo copy from ${FOREIGN_PATH} to ${LOCAL_BASE}
+echo ls ${LOCAL_BASE}
+ls ${LOCAL_BASE}
+rsync -av lcadigan@snellius.surf.nl:~/helm/${FOREIGN_PATH}/ ${LOCAL_BASE}/${SUITE_NAME}
+ls ${LOCAL_BASE}
+
+
+
+
+INFO:fairseq_cli.generate:Translated 3,000 sentences (84,725 tokens) in 9.3s (323.24 sentences/s, 9128.81 tokens/s)
+
+Ok, so idea:
+run each model with 100 different seeds
+Verify that the points are different
+
+
+Changes to make:
+    remove:
+attn_output_weights = softmax(attn_output_weights, dim=-1)
+    add:
+attn_output_weights = sparsemax(attn_output_weights, dim=-1)

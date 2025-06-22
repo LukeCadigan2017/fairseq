@@ -1,6 +1,7 @@
 #Thesis
 examples
 checkpoints_fairseq
+softmax_results
 
 # JetBrains PyCharm IDE
 .idea/

@@ -1,3 +1,14 @@
+Changes I made:
+    Two changes in the attention stuff
+    Change in the output layer
+
+
+Important jobs:
+    vi ./outputs/fairseq_train_12462921.out
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
 Ok, so looks like training works with original parameters
 
 Now, we're trying to figure out how to train it with sparsemax
@@ -6,26 +17,22 @@ fconv_wmt_en_fr
 
 Looks like when you train, you specify architecture with --arch and checkpoint dir with --save-dir 
 
-
-
-ls fairseq/models/transformer/transformer_decoder.py
-ls fairseq/modules/multihead_attention.py
-
-cp fairseq/models/transformer/transformer_decoder.py fairseq/models/transformer/transformer_decoder_original.py
-cp fairseq/modules/multihead_attention.py fairseq/modules/multihead_attention_original.py
-
-cp fairseq/models/transformer/transformer_decoder.py fairseq/models/transformer/transformer_decoder_multimax.py
-cp fairseq/modules/multihead_attention.py fairseq/modules/multihead_attention_multimax.py
-
-    
-
-
-cp /Users/lukecadigan/thesis/MultiMax/thesis/transformer_decoder.py fairseq/models/transformer/transformer_decoder.py
-cp /Users/lukecadigan/thesis/MultiMax/thesis/multihead_attention.py fairseq/modules/multihead_attention.py
+export FOREIGN_PATH=/gpfs/home5/lcadigan/fairseq/outputs/fairseq_train_12462921.out
+export LOCAL_NAME=fairseq_train_softmax.out
+rsync -av lcadigan@snellius.surf.nl:${FOREIGN_PATH} ${LOCAL_NAME}
 
 
 
 
-code fairseq/models/transformer/transformer_decoder.py
-code fairseq/modules/multihead_attention.py
+export FOREIGN_PATH=/gpfs/home5/lcadigan/fairseq/outputs/fairseq_train_12480089.out
+export LOCAL_NAME=fairseq_train_softmax2.out
+rsync -av lcadigan@snellius.surf.nl:${FOREIGN_PATH} ${LOCAL_NAME}
 
+
+Ok, averaging 5:
+BLEU4 = 27.67, 58.9/33.4/21.3/14.0 (BP=1.000, ratio=1.008, syslen=64855, reflen=64355)
+Averaging 10:
+BLEU4 = 27.70, 59.0/33.4/21.3/14.0 (BP=1.000, ratio=1.008, syslen=64862, reflen=64355)
+
+
+Random loss for sparsemax: loss size is 12333.8212890625
