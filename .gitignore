@@ -2,6 +2,8 @@
 examples
 checkpoints_fairseq
 softmax_results
+snellius_outputs
+softmax_results_phrases
 
 # JetBrains PyCharm IDE
 .idea/

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#SBATCH --job-name=wmt_sample_test
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=1:00:00
+#SBATCH --output=outputs/fairseq_gen_%A.out
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-task=8
+
+source ~/miniconda3/bin/activate
+conda activate fairseq
+
+EPOCH_NUM=10
+CHECKPOINT=checkpoints/softmax_checkpoints/checkpoint.avg10.pt
+#CHECKPOINT=checkpoint.avg${EPOCH_NUM}.pt
+OUTPUT=gen${EPOCH_NUM}.out
+
+#python scripts/average_checkpoints.py \
+#    --inputs /gpfs/home5/lcadigan/fairseq/checkpoints \
+#    --num-epoch-checkpoints ${EPOCH_NUM} \
+#    --output $CHECKPOINT
+
+fairseq-generate \
+    data-bin/wmt16_en_de_bpe32k \
+    --path $CHECKPOINT \
+    --beam 4 --lenpen 0.6 --remove-bpe --sacrebleu  > $OUTPUT
+
+echo -e "\n\n" Metrics
+cat $OUTPUT | tail -n 1
+
+echo "Overhyped metrics"
+bash scripts/compound_split_bleu.sh $OUTPUT
