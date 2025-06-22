@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import torch.nn.functional as F
 from fairseq import utils
@@ -12,18 +12,22 @@ from fairseq.logging import metrics
 from fairseq.criterions import FairseqCriterion, register_criterion
 from fairseq.dataclass import FairseqDataclass
 from omegaconf import II
-from entmax import SparsemaxLoss
+from entmax import SparsemaxLoss, sparsemax_bisect_loss
 
 @dataclass
 class SparsemaxCriterionConfig(FairseqDataclass):
     sentence_avg: bool = II("optimization.sentence_avg")
-
+    report_accuracy: bool = field(
+        default=False,
+        metadata={"help": "report accuracy metric"},
+    )
 
 @register_criterion("sparsemax_loss", dataclass=SparsemaxCriterionConfig)
 class SparsemaxCriterion(FairseqCriterion):
     def __init__(self, task, sentence_avg):
         super().__init__(task)
         self.sentence_avg = sentence_avg
+        # self.sparsemax_loss=sparsemax_bisect_loss
         self.sparsemax_loss=SparsemaxLoss().loss
 
     
@@ -37,19 +41,27 @@ class SparsemaxCriterion(FairseqCriterion):
         3) logging outputs to display while training
         """
         net_output = model(**sample["net_input"])
-        loss, _ = self.compute_loss(model, net_output, sample, reduce=reduce)
+        loss, nll_loss = self.compute_loss(model, net_output, sample, reduce=reduce)
+        # sample_size = (
+        #     sample["target"].size(0) if self.sentence_avg else sample["ntokens"]
+        # )
+        # logging_output = {
+        #     "loss": loss.data,
+        #     "ntokens": sample["ntokens"],
+        #     "nsentences": sample["target"].size(0),
+        #     "sample_size": sample_size,
+        # }
+
         sample_size = (
             sample["target"].size(0) if self.sentence_avg else sample["ntokens"]
         )
         logging_output = {
             "loss": loss.data,
+            "nll_loss": nll_loss.data,
             "ntokens": sample["ntokens"],
             "nsentences": sample["target"].size(0),
             "sample_size": sample_size,
         }
-
-
-
         return loss, sample_size, logging_output
 
     def compute_loss(self, model, net_output, sample, reduce=True):
@@ -80,7 +92,7 @@ class SparsemaxCriterion(FairseqCriterion):
         # print(f"lprobs size: {lprobs.size()}")
         #loss should ideally be around loss is 27371.708984375
         loss=sum(raw_loss)
-        print(f"loss is {loss}")
+        # print(f"loss is {loss}")
         return loss, loss
 
     @staticmethod
