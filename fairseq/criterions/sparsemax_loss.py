@@ -80,6 +80,7 @@ class SparsemaxCriterion(FairseqCriterion):
         # print(f"lprobs size: {lprobs.size()}")
         #loss should ideally be around loss is 27371.708984375
         loss=sum(raw_loss)
+        print(f"loss is {loss}")
         return loss, loss
 
     @staticmethod
