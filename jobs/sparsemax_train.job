@@ -25,8 +25,10 @@ fairseq-train \
     --lr-scheduler inverse_sqrt --warmup-updates 4000 --warmup-init-lr 1e-07 \
     --dropout 0.3 --weight-decay 0.0 \
     --max-tokens 3584 --fp16 \
-    --update-freq 16 --lr 0.001  --max-epoch 1 \
+    --lr 0.0005 \
+    --max-epoch 1 \
     --criterion sparsemax_loss \
     --eval-bleu \
     --eval-bleu-print-samples
+    # --update-freq 16 
     #--criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
