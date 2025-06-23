@@ -23,13 +23,13 @@ CUDA_VISIBLE_DEVICES=0 fairseq-train \
     --dropout 0.3 --weight-decay 0.0001 \
     --max-tokens 4096 \
     --eval-bleu \
-    --eval-bleu-args '{"beam": 5, "max_len_a": 1.2, "max_len_b": 10}' \
-    --eval-bleu-detok moses \
-    --eval-bleu-remove-bpe \
-    --eval-bleu-print-samples \
     --best-checkpoint-metric bleu --maximize-best-checkpoint-metric \
     --max-epoch 50 \
     --criterion sparsemax_loss
+    # --eval-bleu-args '{"beam": 5, "max_len_a": 1.2, "max_len_b": 10}' \
+    # --eval-bleu-detok moses \
+    # --eval-bleu-remove-bpe \
+    # --eval-bleu-print-samples \
     # --criterion label_smoothed_cross_entropy --label-smoothing 0.1 
     
 
